@@ -1,13 +1,12 @@
 axiosist
 ========
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Gerhut/axiosist.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/Gerhut/axiosist.svg?branch=master)](https://travis-ci.org/Gerhut/axiosist)
 [![Coverage Status](https://coveralls.io/repos/github/Gerhut/axiosist/badge.svg?branch=master)](https://coveralls.io/github/Gerhut/axiosist?branch=master)
 [![dependencies Status](https://david-dm.org/Gerhut/axiosist/status.svg)](https://david-dm.org/Gerhut/axiosist)
 [![devDependencies Status](https://david-dm.org/Gerhut/axiosist/dev-status.svg)](https://david-dm.org/Gerhut/axiosist?type=dev)
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Gerhut/axiosist.svg)](https://greenkeeper.io/)
 
 Convert node.js request handler to axios adapter, used for node.js server unit test.
 
