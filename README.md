@@ -8,7 +8,52 @@ axiosist
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Gerhut/axiosist.svg)](https://greenkeeper.io/)
 
-Convert node.js request handler to axios adapter, used for node.js server unit test.
+[Axios][axios] based supertest: convert node.js request handler to [axios][axios] adapter, used for node.js server unit test.
+
+Why another supertest?
+----------------------
+
+Supertest(Superagent) is build on callbacks.
+
+```JavaScript
+supertest(app).get('/').end((err, res) => console.log(res.data))
+```
+
+Although compatible with stream mode & promise mode.
+
+```JavaScript
+// Stream mode
+fs.createReadStream('foo.txt')
+.pipe(supertest(app).post('/'))
+.on('response', res => console.log('Successful.'))
+
+// Promise mode
+supertest(app).delete('/').then(
+    res => console.log('Successful.'),
+    err => console.log('Failed.')
+)
+```
+
+We can use one mode of them, but not multi modes together.
+
+```JavaScript
+fs.createReadStream('foo.txt')
+.pipe(supertest(app).post('/')).then(
+    res => console.log('Successful.'),
+    err => console.log('Failed.')
+) // Boom: two requests sent.
+```
+
+Axios is build on promises, and easy to use with callbacks & streams together.
+
+```JavaScript
+axiosist(app).post('/', fs.createReadStream('foo.txt')).then(
+    res => console.log('Successful.'),
+    err => console.log('Failed.')
+) // Works
+```
+
+It may be more suitable for some specific test cases.
 
 Install
 -------
@@ -81,3 +126,5 @@ License
 -------
 
 MIT
+
+[axios]: https://www.npmjs.com/package/axios
