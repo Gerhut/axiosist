@@ -29,6 +29,6 @@
     "standard": "^10.0.2"
   },
   "dependencies": {
-    "axios": "^0.16.2"
+    "axios": "^0.17.0"
   }
 }
