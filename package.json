@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Gerhut/axiosist#readme",
   "devDependencies": {
-    "ava": "^0.22.0",
+    "ava": "^0.23.0",
     "nyc": "^11.0.2",
     "standard": "^10.0.2"
   },
