@@ -4,7 +4,9 @@
   "description": "Convert node.js request handler to axios adapter",
   "main": "index.js",
   "scripts": {
-    "pretest": "standard",
+    "lint": "standard",
+    "postlint": "tsc",
+    "pretest": "npm run lint",
     "test": "ava",
     "posttest": "nyc ava"
   },
@@ -24,9 +26,11 @@
   },
   "homepage": "https://github.com/Gerhut/axiosist#readme",
   "devDependencies": {
+    "@types/node": "^10.3.6",
     "ava": "^0.25.0",
     "nyc": "^12.0.2",
-    "standard": "^11.0.0"
+    "standard": "^11.0.0",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
     "axios": "^0.18.0"
