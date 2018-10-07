@@ -42,5 +42,6 @@ const axiosist = callback => {
   })
 }
 
-module.exports = axiosist
-module.exports.createAdapter = createAdapter
+exports = module.exports = axiosist
+exports.default = axiosist
+exports.createAdapter = createAdapter

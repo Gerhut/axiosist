@@ -25,14 +25,14 @@
     "url": "https://github.com/Gerhut/axiosist/issues"
   },
   "homepage": "https://github.com/Gerhut/axiosist#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
   "devDependencies": {
     "@types/node": "^10.3.6",
     "ava": "^0.25.0",
     "nyc": "^12.0.2",
     "standard": "^12.0.0",
     "typescript": "^2.9.2"
-  },
-  "dependencies": {
-    "axios": "^0.18.0"
   }
 }
