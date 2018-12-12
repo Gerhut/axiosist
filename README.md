@@ -1,5 +1,4 @@
-axiosist
-========
+# axiosist
 
 [![Build Status](https://travis-ci.org/Gerhut/axiosist.svg?branch=master)](https://travis-ci.org/Gerhut/axiosist)
 [![Coverage Status](https://coveralls.io/repos/github/Gerhut/axiosist/badge.svg?branch=master)](https://coveralls.io/github/Gerhut/axiosist?branch=master)
@@ -10,8 +9,7 @@ axiosist
 
 [Axios][axios] based supertest: convert node.js request handler to [axios][axios] adapter, used for node.js server unit test.
 
-Why another supertest?
-----------------------
+## Why another supertest
 
 Supertest(Superagent) is build on callbacks.
 
@@ -55,13 +53,11 @@ axiosist(app).post('/', fs.createReadStream('foo.txt')).then(
 
 It may be more suitable for some specific test cases.
 
-Install
--------
+## Install
 
-    $ npm install --save-dev axiosist
-    
-Usage
------
+    npm install --save-dev axiosist
+
+## Usage
 
 ```javascript
 // App
@@ -79,8 +75,7 @@ axiosist(app).get('/').then(response => {
 })
 ```
 
-API
----
+## API
 
 ### `axiosist(callback)`
 
@@ -101,8 +96,7 @@ is equal to
 axios.create({ adapter: axiosist.createAdapter(callback) })
 ```
 
-Misc
-----
+## Misc
 
 Axiosist will keep the host header of the request, for example
 
@@ -123,8 +117,7 @@ axiosist(app).get('http://www.example.com:3912/').then(response => {
 })
 ```
 
-License
--------
+## License
 
 MIT
 
