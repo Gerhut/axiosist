@@ -23,7 +23,8 @@ const createAdapter = callback => config => {
 
   const server = http.createServer(callback)
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
+    server.on('error', reject)
     server.listen(0, '127.0.0.1', () => {
       urlObject.port = server.address().port
       config.url = url.format(urlObject)
