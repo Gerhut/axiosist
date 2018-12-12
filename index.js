@@ -4,7 +4,7 @@ const http = require('http')
 const url = require('url')
 
 const axios = require('axios').default
-const nodeAdapter = require('axios/lib/adapters/http')
+const defaultAdapter = axios.defaults.adapter
 
 const createAdapter = callback => config => {
   const urlObject = url.parse(config.url)
@@ -28,7 +28,7 @@ const createAdapter = callback => config => {
     server.listen(0, '127.0.0.1', () => {
       urlObject.port = server.address().port
       config.url = url.format(urlObject)
-      resolve(nodeAdapter(config))
+      resolve(defaultAdapter(config))
     })
   }).then(value => new Promise(resolve => {
     server.close(() => resolve(value))
