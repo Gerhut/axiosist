@@ -3,7 +3,7 @@
 const http = require('http')
 const url = require('url')
 
-const axios = require('axios')
+const axios = require('axios').default
 const nodeAdapter = require('axios/lib/adapters/http')
 
 const createAdapter = callback => config => {
