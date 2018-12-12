@@ -56,9 +56,9 @@ test('should response the right status', t =>
     res.statusCode = 400
     res.statusMessage = 'FOO'
     res.end()
-  }).request({ url: '/' }).catch(error => {
-    t.is(error.response.status, 400)
-    t.is(error.response.statusText, 'FOO')
+  }).request({ url: '/' }).then(response => {
+    t.is(response.status, 400)
+    t.is(response.statusText, 'FOO')
   }))
 
 test('should response the right header', t =>
@@ -74,4 +74,14 @@ test('should response the right body', t =>
     res.end('foo')
   }).request({ url: '/' }).then(response => {
     t.is(response.data, 'foo')
+  }))
+
+test('should fail correctly', t =>
+  axiosist((req, res) => {
+    res.end('foo')
+  }).request({
+    url: '/',
+    maxContentLength: 1
+  }).catch(error => {
+    t.regex(error.message, /maxContentLength/)
   }))

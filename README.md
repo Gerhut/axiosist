@@ -84,7 +84,8 @@ API
 
 ### `axiosist(callback)`
 
-Create an axios instance with adapter of the request callback.
+Create an axios instance with adapter of the request callback,
+and treat all HTTP statuses as fulfilled.
 
 ### `axiosist.createAdapter(callback)`
 
