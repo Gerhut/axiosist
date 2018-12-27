@@ -3,8 +3,7 @@ import axiosist from '.'
 
 test('should request', t =>
   axiosist((req, res) => res.end())
-    .request({ url: '/' })
-    .then(() => t.pass()))
+    .get('/').then(() => t.pass()))
 
 test('should request the right method', t =>
   axiosist((req, res) => {
@@ -47,16 +46,15 @@ test('should request the right host', t =>
   axiosist((req, res) => {
     t.is(req.headers.host, 'example.com')
     res.end()
-  }).request({
-    url: 'http://example.com/foo'
-  }).then(() => t.pass()))
+  }).get('http://example.com/foo')
+    .then(() => t.pass()))
 
 test('should response the right status', t =>
   axiosist((req, res) => {
     res.statusCode = 400
     res.statusMessage = 'FOO'
     res.end()
-  }).request({ url: '/' }).then(response => {
+  }).get('/').then(response => {
     t.is(response.status, 400)
     t.is(response.statusText, 'FOO')
   }))
@@ -65,14 +63,14 @@ test('should response the right header', t =>
   axiosist((req, res) => {
     res.setHeader('foo', 'bar')
     res.end()
-  }).request({ url: '/' }).then(response => {
+  }).get('/').then(response => {
     t.is(response.headers.foo, 'bar')
   }))
 
 test('should response the right body', t =>
   axiosist((req, res) => {
     res.end('foo')
-  }).request({ url: '/' }).then(response => {
+  }).get('/').then(response => {
     t.is(response.data, 'foo')
   }))
 
@@ -89,7 +87,7 @@ test('should response redirect', t =>
     res.statusCode = 302
     res.setHeader('Location', 'http://example.com/')
     res.end()
-  }).request({ url: '/' }).then(response => {
+  }).get('/').then(response => {
     t.is(response.status, 302)
     t.is(response.headers.location, 'http://example.com/')
   }))
