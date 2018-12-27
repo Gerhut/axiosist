@@ -76,12 +76,10 @@ test('should response the right body', t =>
     t.is(response.data, 'foo')
   }))
 
-test('should fail correctly', t =>
+test('should fail correctly', t => t.throws(
   axiosist((req, res) => {
     res.end('foo')
   }).request({
     url: '/',
     maxContentLength: 1
-  }).catch(error => {
-    t.regex(error.message, /maxContentLength/)
-  }))
+  }), /maxContentLength/))
