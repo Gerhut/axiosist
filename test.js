@@ -83,3 +83,13 @@ test('should fail correctly', t => t.throws(
     url: '/',
     maxContentLength: 1
   }), /maxContentLength/))
+
+test('should response redirect', t =>
+  axiosist((req, res) => {
+    res.statusCode = 302
+    res.setHeader('Location', 'http://example.com/')
+    res.end()
+  }).request({ url: '/' }).then(response => {
+    t.is(response.status, 302)
+    t.is(response.headers.location, 'http://example.com/')
+  }))

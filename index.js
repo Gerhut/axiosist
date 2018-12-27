@@ -40,7 +40,8 @@ const createAdapter = callback => config => {
 const axiosist = callback => {
   return axios.create({
     adapter: createAdapter(callback),
-    validateStatus: () => true
+    validateStatus: () => true,
+    maxRedirects: 0
   })
 }
 
