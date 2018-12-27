@@ -10,7 +10,7 @@ test('should request the right method', t =>
   axiosist((req, res) => {
     t.is(req.method, 'POST')
     res.end()
-  }).post('/'))
+  }).post('/').then(() => t.pass()))
 
 test('should request the right url', t =>
   axiosist((req, res) => {
@@ -20,7 +20,7 @@ test('should request the right url', t =>
     baseURL: '/foo',
     url: '/bar',
     params: { baz: 'qux' }
-  }))
+  }).then(() => t.pass()))
 
 test('should request the right header', t =>
   axiosist((req, res) => {
@@ -29,7 +29,7 @@ test('should request the right header', t =>
   }).request({
     url: '/',
     headers: { foo: 'bar' }
-  }))
+  }).then(() => t.pass()))
 
 test('should request the right body', t =>
   axiosist((req, res) => {
@@ -41,7 +41,7 @@ test('should request the right body', t =>
     method: 'post',
     url: '/',
     data: 'foo'
-  }))
+  }).then(() => t.pass()))
 
 test('should request the right host', t =>
   axiosist((req, res) => {
@@ -49,7 +49,7 @@ test('should request the right host', t =>
     res.end()
   }).request({
     url: 'http://example.com/foo'
-  }))
+  }).then(() => t.pass()))
 
 test('should response the right status', t =>
   axiosist((req, res) => {
@@ -76,13 +76,13 @@ test('should response the right body', t =>
     t.is(response.data, 'foo')
   }))
 
-test('should fail correctly', t => t.throws(
+test('should fail correctly', t => t.throwsAsync(
   axiosist((req, res) => {
     res.end('foo')
   }).request({
     url: '/',
     maxContentLength: 1
-  }), /maxContentLength/))
+  }), /maxContentLength/).then(() => t.pass()))
 
 test('should response redirect', t =>
   axiosist((req, res) => {
