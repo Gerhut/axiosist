@@ -21,7 +21,7 @@ const createAdapter = callback => config => {
     config.headers.host = host
   }
 
-  const server = http.createServer(callback)
+  const server = typeof callback === 'function' ? http.createServer(callback) : callback
 
   return new Promise((resolve, reject) => {
     server.on('error', reject)
