@@ -1,4 +1,5 @@
 import test from 'ava'
+import * as http from 'http'
 import axiosist from '.'
 
 test('should request', t =>
@@ -91,3 +92,11 @@ test('should response redirect', t =>
     t.is(response.status, 302)
     t.is(response.headers.location, 'http://example.com/')
   }))
+
+test('should work with http server', t => {
+  const app = http.createServer((req, res) => {
+    res.end('foo')
+  })
+
+  return axiosist(app).get('/').then(() => t.pass())
+})
