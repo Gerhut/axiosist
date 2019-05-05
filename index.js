@@ -1,16 +1,23 @@
+/** @typedef {import('net').AddressInfo} AddressInfo */
+/** @typedef {import('http').Server} Server */
+/** @typedef {import('http').IncomingMessage} IncomingMessage */
+/** @typedef {import('http').ServerResponse} ServerResponse */
+/** @typedef {import('axios').AxiosAdapter} AxiosAdapter */
+/** @typedef {import('axios').AxiosInstance} AxiosInstance */
+
 const http = require('http')
 const url = require('url')
 
 const axios = require('axios').default
-const defaultAdapter = /** @type {import('axios').AxiosAdapter} */(axios.defaults.adapter)
+const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
 
 /**
  * @callback RequestListener
- * @param {import('http').IncomingMessage} request
- * @param {import('http').ServerResponse} response
+ * @param {IncomingMessage} request
+ * @param {ServerResponse} response
  */
 
-/** @typedef {RequestListener | import('http').Server} Handler */
+/** @typedef {RequestListener | Server} Handler */
 
 /**
  * Create the adapter of the request callback, used for your own axios instance.
@@ -23,7 +30,7 @@ const defaultAdapter = /** @type {import('axios').AxiosAdapter} */(axios.default
  * ```
  *
  * @param {Handler} handler A handler for axiosist, may be a request listener or a http server.
- * @returns {import('axios').AxiosAdapter} The axios adapter would used in adapter options of axios.
+ * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
 const createAdapter = handler => config => {
   const urlString = /** @type {string} */(config.url)
@@ -52,7 +59,7 @@ const createAdapter = handler => config => {
       server.listen(0, '127.0.0.1', resolve)
     }
   }).then(() => {
-    const address = /** @type {import('net').AddressInfo} */(server.address())
+    const address = /** @type {AddressInfo} */(server.address())
     urlObject.port = address.port.toString()
     config.url = url.format(urlObject)
     return defaultAdapter(config)
@@ -75,7 +82,7 @@ const createAdapter = handler => config => {
  * Create an axios instance with adapter of the request callback, and treat all HTTP statuses as fulfilled.
  *
  * @param {Handler} handler A handler, may be a request listener or a http server.
- * @returns {import('axios').AxiosInstance} The axios instance would use for test.
+ * @returns {AxiosInstance} The axios instance would use for test.
  */
 const axiosist = handler => {
   return axios.create({
