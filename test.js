@@ -3,12 +3,12 @@ import { createServer } from 'http'
 import axiosist from '.'
 
 test('should request', async t => {
+  t.plan(0)
   await axiosist((req, res) => res.end()).get('/')
-  t.pass()
 })
-  
 
 test('should request the right method', async t => {
+  t.plan(1)
   await axiosist((req, res) => {
     t.is(req.method, 'POST')
     res.end()
@@ -16,6 +16,7 @@ test('should request the right method', async t => {
 })
 
 test('should request the right url', async t => {
+  t.plan(1)
   await axiosist((req, res) => {
     t.is(req.url, '/foo/bar?baz=qux')
     res.end()
@@ -27,6 +28,7 @@ test('should request the right url', async t => {
 })
 
 test('should request the right header', async t => {
+  t.plan(1)
   await axiosist((req, res) => {
     t.is(req.headers.foo, 'bar')
     res.end()
@@ -37,6 +39,7 @@ test('should request the right header', async t => {
 })
 
 test('should request the right body', async t => {
+  t.plan(1)
   await axiosist((req, res) => {
     req.setEncoding('utf8')
     req
@@ -50,6 +53,7 @@ test('should request the right body', async t => {
 })
 
 test('should request the right host', async t => {
+  t.plan(1)
   await axiosist((req, res) => {
     t.is(req.headers.host, 'example.com')
     res.end()
