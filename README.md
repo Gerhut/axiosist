@@ -9,6 +9,51 @@
 
 [Axios][axios] based supertest: convert node.js request handler to [axios][axios] adapter, used for node.js server unit test.
 
+## Install
+
+    npm install --save-dev axiosist
+
+## Usage
+
+```javascript
+// App
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => res.status(201).send('foo'))
+
+// Unit test in async function
+const assert = require('assert')
+const axiosist = require('axiosist')
+
+void (async () => {
+    const response = await axiosist(app).get('/')
+    assert.strictEqual(201, response.statusCode)
+    assert.strictEqual('foo', response.data)
+}) ()
+```
+
+## API
+
+### `axiosist(callback)`
+
+Create an axios instance with adapter of the request callback,
+and treat all HTTP statuses as fulfilled.
+
+### `axiosist.createAdapter(callback)`
+
+Create the adapter of the request callback, used for your own axios instance.
+
+```javascript
+axiosist(callback)
+```
+
+is equal to
+
+```javascript
+axios.create({ adapter: axiosist.createAdapter(callback) })
+```
+
 ## Why another supertest
 
 Supertest(Superagent) is build on callbacks.
@@ -53,49 +98,6 @@ axiosist(app).post('/', fs.createReadStream('foo.txt')).then(
 
 It may be more suitable for some specific test cases.
 
-## Install
-
-    npm install --save-dev axiosist
-
-## Usage
-
-```javascript
-// App
-const express = require('express')
-const app = express()
-
-app.get('/', (req, res) => res.status(201).send('foo'))
-
-// Unit test
-const assert = require('assert')
-const axiosist = require('axiosist')
-axiosist(app).get('/').then(response => {
-    assert.strictEqual(201, response.statusCode)
-    assert.strictEqual('foo', response.data)
-})
-```
-
-## API
-
-### `axiosist(callback)`
-
-Create an axios instance with adapter of the request callback,
-and treat all HTTP statuses as fulfilled.
-
-### `axiosist.createAdapter(callback)`
-
-Create the adapter of the request callback, used for your own axios instance.
-
-```javascript
-axiosist(callback)
-```
-
-is equal to
-
-```javascript
-axios.create({ adapter: axiosist.createAdapter(callback) })
-```
-
 ## Misc
 
 Axiosist will keep the host header of the request, for example
@@ -104,17 +106,21 @@ Axiosist will keep the host header of the request, for example
 const express = require('express')
 const app = require('app')
 
-app.get('/', (req, res) => res.send(req.get('host')))
+app.get('/host', (req, res) => res.send(req.get('host')))
 
 
 const assert = require('assert')
 const axiosist = require('axiosist')
-axiosist(app).get('/').then(response => {
+
+void (async () => {
+    const response = await axiosist(app).get('/host')
     assert.strictEqual('127.0.0.1:5xxxxx', response.data)
-})
-axiosist(app).get('http://www.example.com:3912/').then(response => {
+}) ()
+
+void (async () => {
+    const response = await axiosist(app).get('http://www.example.com:3912/host')
     assert.strictEqual('www.example.com:3912', response.data)
-})
+}) ()
 ```
 
 ## License
