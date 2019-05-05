@@ -6,8 +6,6 @@
     "checkJs": true,
     "noEmit": true,
     "strict": true,
+    "allowSyntheticDefaultImports": true,
   },
-  "files": [
-    "test.js"
-  ]
 }
