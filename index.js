@@ -6,7 +6,7 @@ const url = require('url')
 const axios = require('axios').default
 const defaultAdapter = axios.defaults.adapter
 
-const createAdapter = callback => config => {
+const createAdapter = handler => config => {
   const urlObject = url.parse(config.url)
 
   // Forcely set protocol to HTTP
@@ -21,7 +21,7 @@ const createAdapter = callback => config => {
     config.headers.host = host
   }
 
-  const server = typeof callback === 'function' ? http.createServer(callback) : callback
+  const server = handler instanceof http.Server ? handler : http.createServer(handler)
 
   return new Promise((resolve, reject) => {
     server.on('error', reject)
@@ -37,9 +37,9 @@ const createAdapter = callback => config => {
   }))
 }
 
-const axiosist = callback => {
+const axiosist = handler => {
   return axios.create({
-    adapter: createAdapter(callback),
+    adapter: createAdapter(handler),
     validateStatus: () => true,
     maxRedirects: 0
   })
