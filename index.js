@@ -33,8 +33,7 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
 const createAdapter = handler => config => {
-  const urlString = /** @type {string} */(config.url)
-  const urlObject = url.parse(urlString)
+  const urlObject = url.parse(config.url || '')
 
   // Forcely set protocol to HTTP
   urlObject.protocol = 'http:'

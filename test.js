@@ -27,6 +27,16 @@ test('should request the right url', async t => {
   })
 })
 
+test('should request the empty url', async t => {
+  t.plan(1)
+  await axiosist((req, res) => {
+    t.is(req.url, '/?baz=qux')
+    res.end()
+  }).request({
+    params: { baz: 'qux' }
+  })
+})
+
 test('should request the right header', async t => {
   t.plan(1)
   await axiosist((req, res) => {
