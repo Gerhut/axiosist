@@ -4,7 +4,6 @@ node_js:
   - stable
   - lts/dubnium
   - lts/carbon
-  - lts/boron
 
 after_success:
   - npm install --global nyc coveralls
