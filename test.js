@@ -111,3 +111,14 @@ test('should work with listened http server', t => {
       return new Promise(resolve => server.close(resolve))
     })
 })
+
+test('should work with listened http server (failed request)', t => {
+  const server = createServer((req, res) => res.end('bar'))
+  return t.throwsAsync(
+    new Promise(resolve => server.listen(resolve))
+      .then(() => axiosist(server).get('/', { maxContentLength: 1 }))
+  ).then(() => {
+    t.true(server.listening)
+    return new Promise(resolve => server.close(resolve))
+  })
+})
