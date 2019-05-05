@@ -19,6 +19,9 @@
     "adapter",
     "test"
   ],
+  "files": [
+    "index.js"
+  ],
   "author": "George Cheng <Gerhut@GMail.com>",
   "license": "MIT",
   "bugs": {
