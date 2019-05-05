@@ -4,7 +4,7 @@ import axiosist from '.'
 
 test('should request', async t => {
   t.plan(0)
-  await axiosist((req, res) => res.end()).get('/')
+  await axiosist((_req, res) => res.end()).get('/')
 })
 
 test('should request the right method', async t => {
@@ -61,7 +61,7 @@ test('should request the right host', async t => {
 })
 
 test('should response the right status', async t => {
-  const response = await axiosist((req, res) => {
+  const response = await axiosist((_req, res) => {
     res.statusCode = 400
     res.statusMessage = 'FOO'
     res.end()
@@ -72,7 +72,7 @@ test('should response the right status', async t => {
 })
 
 test('should response the right header', async t => {
-  const response = await axiosist((req, res) => {
+  const response = await axiosist((_req, res) => {
     res.setHeader('foo', 'bar')
     res.end()
   }).get('/')
@@ -81,7 +81,7 @@ test('should response the right header', async t => {
 })
 
 test('should response the right body', async t => {
-  const response = await axiosist((req, res) => {
+  const response = await axiosist((_req, res) => {
     res.end('foo')
   }).get('/')
 
@@ -90,7 +90,7 @@ test('should response the right body', async t => {
 
 test('should fail correctly', async t => {
   await t.throwsAsync(async () => {
-    return axiosist((req, res) => {
+    return axiosist((_req, res) => {
       res.end('foo')
     }).request({
       url: '/',
@@ -100,7 +100,7 @@ test('should fail correctly', async t => {
 })
 
 test('should response redirect', async t => {
-  const response = await axiosist((req, res) => {
+  const response = await axiosist((_req, res) => {
     res.statusCode = 302
     res.setHeader('Location', 'http://example.com/')
     res.end()
@@ -111,7 +111,7 @@ test('should response redirect', async t => {
 })
 
 test('should work with unlistened http server', async t => {
-  const server = createServer((req, res) => res.end('foo'))
+  const server = createServer((_req, res) => res.end('foo'))
   const response = await axiosist(server).get('/')
 
   t.is(response.data, 'foo')
@@ -119,7 +119,7 @@ test('should work with unlistened http server', async t => {
 })
 
 test('should work with listened http server', async t => {
-  const server = createServer((req, res) => res.end('bar'))
+  const server = createServer((_req, res) => res.end('bar'))
   await new Promise(resolve => server.listen(resolve))
 
   const response = await axiosist(server).get('/')
@@ -131,7 +131,7 @@ test('should work with listened http server', async t => {
 })
 
 test('should work with listened http server (failed request)', async t => {
-  const server = createServer((req, res) => res.end('bar'))
+  const server = createServer((_req, res) => res.end('bar'))
   await new Promise(resolve => server.listen(resolve))
 
   await t.throwsAsync(() => axiosist(server).get('/', { maxContentLength: 1 }))
