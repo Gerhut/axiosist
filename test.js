@@ -93,9 +93,21 @@ test('should response redirect', t =>
     t.is(response.headers.location, 'http://example.com/')
   }))
 
-test('should work with http server', t =>
-  axiosist(
-    createServer((req, res) => res.end('foo'))
-  ).get('/').then(response => {
+test('should work with unlistened http server', t => {
+  const server = createServer((req, res) => res.end('foo'))
+  return axiosist(server).get('/').then(response => {
     t.is(response.data, 'foo')
-  }))
+    t.false(server.listening)
+  })
+})
+
+test('should work with listened http server', t => {
+  const server = createServer((req, res) => res.end('bar'))
+  return new Promise(resolve => server.listen(resolve))
+    .then(() => axiosist(server).get('/'))
+    .then(response => {
+      t.is(response.data, 'bar')
+      t.true(server.listening)
+      return new Promise(resolve => server.close(resolve))
+    })
+})
