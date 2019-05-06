@@ -1,9 +1,11 @@
-/** @typedef {import('net').AddressInfo} AddressInfo */
-/** @typedef {import('http').Server} Server */
-/** @typedef {import('http').IncomingMessage} IncomingMessage */
-/** @typedef {import('http').ServerResponse} ServerResponse */
-/** @typedef {import('axios').AxiosAdapter} AxiosAdapter */
-/** @typedef {import('axios').AxiosInstance} AxiosInstance */
+/**
+ * @typedef {import('net').AddressInfo} AddressInfo
+ * @typedef {import('http').Server} Server
+ * @typedef {import('http').IncomingMessage} IncomingMessage
+ * @typedef {import('http').ServerResponse} ServerResponse
+ * @typedef {import('axios').AxiosAdapter} AxiosAdapter
+ * @typedef {import('axios').AxiosInstance} AxiosInstance
+ */
 
 const http = require('http')
 const url = require('url')
