@@ -99,14 +99,12 @@ test('should response the right body', async t => {
 })
 
 test('should fail correctly', async t => {
-  await t.throwsAsync(async () => {
-    return axiosist((req, res) => {
-      res.end('foo')
-    }).request({
-      url: '/',
-      maxContentLength: 1
-    })
-  }, /maxContentLength/)
+  await t.throwsAsync(axiosist((req, res) => {
+    res.end('foo')
+  }).request({
+    url: '/',
+    maxContentLength: 1
+  }), /maxContentLength/)
 })
 
 test('should response redirect', async t => {
@@ -144,7 +142,7 @@ test('should work with listened http server (failed request)', async t => {
   const server = createServer((req, res) => res.end('bar'))
   await new Promise(resolve => server.listen(resolve))
 
-  await t.throwsAsync(() => axiosist(server).get('/', { maxContentLength: 1 }))
+  await t.throwsAsync(axiosist(server).get('/', { maxContentLength: 1 }))
   t.true(server.listening)
 
   await new Promise(resolve => server.close(resolve))
