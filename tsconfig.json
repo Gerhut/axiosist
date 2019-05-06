@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2017",
     "moduleResolution": "node",
     "allowJs": true,
     "checkJs": true,
