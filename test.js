@@ -147,3 +147,8 @@ test('should work with listened http server (failed request)', async t => {
 
   await new Promise(resolve => server.close(resolve))
 })
+
+test('server error after request', async t => {
+  const server = createServer((req, res) => server.emit('error', Error('foo')))
+  await t.throwsAsync(axiosist(server).get('/'), 'foo')
+})

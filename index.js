@@ -34,7 +34,7 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @param {Handler} handler A handler for axiosist, may be a request listener or a http server.
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
-const createAdapter = handler => config => {
+const createAdapter = handler => config => new Promise((resolve, reject) => {
   const urlObject = url.parse(config.url || '')
 
   // Forcely set protocol to HTTP
@@ -52,29 +52,28 @@ const createAdapter = handler => config => {
   const server = handler instanceof http.Server ? handler : http.createServer(handler)
   const listening = server.listening
 
-  let promise = new Promise((resolve, reject) => {
-    server.on('error', reject)
-    if (listening) {
-      resolve()
-    } else {
-      server.listen(0, '127.0.0.1', resolve)
-    }
-  }).then(() => {
+  server.on('error', reject)
+
+  let promise = listening
+    ? Promise.resolve()
+    : new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  
+  promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
     urlObject.port = address.port.toString()
     config.url = url.format(urlObject)
     return defaultAdapter(config)
   })
 
-  if (!listening) {
+  if (listening) {
+    promise = promise.then(resolve, reject)
+  } else {
     promise = promise.then(
-      value => new Promise(resolve => server.close(() => resolve(value))),
-      reason => new Promise((resolve, reject) => server.close(() => reject(reason)))
+      value => server.close(() => resolve(value)),
+      reason => server.close(() => reject(reason))
     )
   }
-
-  return promise
-}
+})
 
 /**
  * Create an axios instance with adapter of the request callback, and treat all HTTP statuses as fulfilled.
