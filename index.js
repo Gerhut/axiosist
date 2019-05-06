@@ -57,7 +57,7 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
   let promise = listening
     ? Promise.resolve()
     : new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
-  
+
   promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
     urlObject.port = address.port.toString()
@@ -66,9 +66,9 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
   })
 
   if (listening) {
-    promise = promise.then(resolve, reject)
+    promise.then(resolve, reject)
   } else {
-    promise = promise.then(
+    promise.then(
       value => server.close(() => resolve(value)),
       reason => server.close(() => reject(reason))
     )
