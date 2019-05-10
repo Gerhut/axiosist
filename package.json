@@ -1,6 +1,6 @@
 {
   "name": "axiosist",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Convert node.js request handler to axios adapter",
   "main": "index.js",
   "scripts": {
