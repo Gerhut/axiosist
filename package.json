@@ -20,7 +20,8 @@
     "test"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "author": "George Cheng <Gerhut@GMail.com>",
   "license": "MIT",
