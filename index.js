@@ -22,15 +22,6 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
 /** @typedef {RequestListener | Server} Handler */
 
 /**
- * Create the adapter of the request callback, used for your own axios instance.
- * ```
- * axiosist(callback)
- * ```
- * is equal to
- * ```
- * axios.create({ adapter: axiosist.createAdapter(callback) })
- * ```
- *
  * @param {Handler} handler A handler for axiosist, may be a request listener or a http server.
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
@@ -76,8 +67,6 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 })
 
 /**
- * Create an axios instance with adapter of the request callback, and treat all HTTP statuses as fulfilled.
- *
  * @param {Handler} handler A handler, may be a request listener or a http server.
  * @returns {AxiosInstance} The axios instance would use for test.
  */
