@@ -30,10 +30,8 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   // Forcely set protocol to HTTP
   urlObject.set('protocol', 'http')
-  // urlObject.slashes = true
 
   const host = urlObject.host
-  // delete urlObject.host
   urlObject.set('hostname', '127.0.0.1')
   // Apply original host to request header
   if (host != null && config.headers.host == null) {
