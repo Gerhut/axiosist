@@ -9,7 +9,7 @@
 
 const http = require('http')
 const url = require('url')
-
+const Url = require('url-parse')
 const axios = require('axios').default
 const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
 
@@ -26,15 +26,15 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
 const createAdapter = handler => config => new Promise((resolve, reject) => {
-  const urlObject = url.parse(config.url || '')
+  var urlObject = new Url(config.url || '')
 
   // Forcely set protocol to HTTP
-  urlObject.protocol = 'http:'
-  urlObject.slashes = true
+  urlObject.set('protocol', 'http')
+  // urlObject.slashes = true
 
   const host = urlObject.host
-  delete urlObject.host
-  urlObject.hostname = '127.0.0.1'
+  // delete urlObject.host
+  urlObject.set('hostname', '127.0.0.1')
   // Apply original host to request header
   if (host != null && config.headers.host == null) {
     config.headers.host = host
@@ -51,7 +51,8 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
-    urlObject.port = address.port.toString()
+    const portstr = address.port.toString()
+    urlObject.set('port', portstr)
     config.url = url.format(urlObject)
     return defaultAdapter(config)
   })
