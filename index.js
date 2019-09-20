@@ -7,8 +7,8 @@
  * @typedef {import('axios').AxiosInstance} AxiosInstance
  */
 
-const http = require('http')
-const url = require('url')
+const { Server, createServer } = require('http')
+const { URL } = require('url')
 
 const axios = require('axios').default
 const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
@@ -26,21 +26,19 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
 const createAdapter = handler => config => new Promise((resolve, reject) => {
-  const urlObject = url.parse(config.url || '')
+  const url = new URL(config.url || '', 'http://axiosist/')
 
   // Forcely set protocol to HTTP
-  urlObject.protocol = 'http:'
-  urlObject.slashes = true
+  url.protocol = 'http'
 
-  const host = urlObject.host
-  delete urlObject.host
-  urlObject.hostname = '127.0.0.1'
+  const host = url.host
+  url.host = '127.0.0.1'
   // Apply original host to request header
-  if (host != null && config.headers.host == null) {
+  if (host !== 'axiosist' && config.headers.host == null) {
     config.headers.host = host
   }
 
-  const server = handler instanceof http.Server ? handler : http.createServer(handler)
+  const server = handler instanceof Server ? handler : createServer(handler)
   const listening = server.listening
 
   server.on('error', reject)
@@ -51,8 +49,8 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
-    urlObject.port = address.port.toString()
-    config.url = url.format(urlObject)
+    url.port = address.port.toString()
+    config.url = url.toString()
     return defaultAdapter(config)
   })
 
