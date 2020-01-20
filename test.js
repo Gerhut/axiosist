@@ -1,6 +1,6 @@
-import test from 'ava'
-import { createServer } from 'http'
-import axiosist from '.'
+const test = require('ava').default
+const { createServer } = require('http')
+const axiosist = require('.')
 
 test('should request', async t => {
   t.plan(0)
@@ -104,7 +104,7 @@ test('should fail correctly', async t => {
   }).request({
     url: '/',
     maxContentLength: 1
-  }), /maxContentLength/)
+  }), { message: /maxContentLength/ })
 })
 
 test('should response redirect', async t => {
@@ -151,5 +151,5 @@ test('should work with listened http server (failed request)', async t => {
 test('server error after request', async t => {
   /** @type {import('http').Server} */
   const server = createServer((req, res) => server.emit('error', Error('foo')))
-  await t.throwsAsync(axiosist(server).get('/'), 'foo')
+  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
 })
