@@ -22,20 +22,28 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
 /** @typedef {RequestListener | Server} Handler */
 
 /**
+ * @param {string} urlString the url to tell.
+ * @returns {boolean} whether the url is absolute url.
+ */
+const isAbsoluteUrl = (urlString) => {
+  const url = new URL(urlString, 'http://axiosist/')
+  return url.host !== 'axiosist'
+}
+
+/**
  * @param {Handler} handler A handler for axiosist, may be a request listener or a http server.
  * @returns {AxiosAdapter} The axios adapter would used in adapter options of axios.
  */
 const createAdapter = handler => config => new Promise((resolve, reject) => {
-  const url = new URL(config.url || '', 'http://axiosist/')
+  const urlField = isAbsoluteUrl(config.url || '') ? 'url' : 'baseURL'
+  const url = new URL(config[urlField] || '', 'http://axiosist/')
 
   // Forcely set protocol to HTTP
   url.protocol = 'http'
 
-  const host = url.host
-  url.host = '127.0.0.1'
   // Apply original host to request header
-  if (host !== 'axiosist' && config.headers.host == null) {
-    config.headers.host = host
+  if (url.host !== 'axiosist' && config.headers.host == null) {
+    config.headers.host = url.host
   }
 
   const server = handler instanceof Server ? handler : createServer(handler)
@@ -49,8 +57,9 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
+    url.host = '127.0.0.1'
     url.port = address.port.toString()
-    config.url = url.toString()
+    config[urlField] = url.toString()
     return defaultAdapter(config)
   })
 
