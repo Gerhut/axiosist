@@ -1,6 +1,6 @@
 /**
  * @typedef {import('net').AddressInfo} AddressInfo
- * @typedef {import('http').Server} Server
+ * @typedef {import('http').Server} IServer
  * @typedef {import('http').IncomingMessage} IncomingMessage
  * @typedef {import('http').ServerResponse} ServerResponse
  * @typedef {import('axios').AxiosAdapter} AxiosAdapter
@@ -19,7 +19,7 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @param {ServerResponse} response
  */
 
-/** @typedef {RequestListener | Server} Handler */
+/** @typedef {RequestListener | IServer} Handler */
 
 /**
  * @param {string} urlString the url to tell.
@@ -53,7 +53,7 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   let promise = listening
     ? Promise.resolve()
-    : new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+    : new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(undefined)))
 
   promise = promise.then(() => {
     const address = /** @type {AddressInfo} */(server.address())
