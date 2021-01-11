@@ -1,6 +1,5 @@
 /**
  * @typedef {import('net').AddressInfo} AddressInfo
- * @typedef {import('http').Server} Server
  * @typedef {import('http').IncomingMessage} IncomingMessage
  * @typedef {import('http').ServerResponse} ServerResponse
  * @typedef {import('axios').AxiosAdapter} AxiosAdapter
@@ -51,26 +50,42 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
 
   server.on('error', reject)
 
-  let promise = listening
-    ? Promise.resolve()
-    : new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
-
-  promise = promise.then(() => {
-    const address = /** @type {AddressInfo} */(server.address())
-    url.host = '127.0.0.1'
-    url.port = address.port.toString()
-    config[urlField] = url.toString()
-    return defaultAdapter(config)
-  })
-
-  if (listening) {
-    promise.then(resolve, reject)
-  } else {
-    promise.then(
-      value => server.close(() => resolve(value)),
-      reason => server.close(() => reject(reason))
-    )
-  }
+  resolve(/** @type {Promise<void>} */ (
+    new Promise(resolve => {
+      if (listening) {
+        resolve()
+      } else {
+        server.listen(0, '127.0.0.1', resolve)
+      }
+    })
+  ).then(
+    () => {
+      const address = /** @type {AddressInfo} */(server.address())
+      url.host = '127.0.0.1'
+      url.port = address.port.toString()
+      config[urlField] = url.toString()
+      return defaultAdapter(config)
+    }
+  ).then(
+    (response) => {
+      if (listening) {
+        return response
+      } else {
+        return new Promise(resolve => {
+          server.close(() => resolve(response))
+        })
+      }
+    },
+    (error) => {
+      if (listening) {
+        throw error
+      } else {
+        return new Promise((resolve, reject) => {
+          server.close(() => reject(error))
+        })
+      }
+    }
+  ))
 })
 
 /**
