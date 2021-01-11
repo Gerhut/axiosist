@@ -1,6 +1,6 @@
 const test = require('ava').default
 const { createServer } = require('http')
-const axiosist = require('.')
+const axiosist = require('.').default
 
 test('should request', async t => {
   t.plan(0)

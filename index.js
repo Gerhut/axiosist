@@ -101,4 +101,5 @@ const axiosist = handler => {
 }
 
 module.exports = axiosist
+module.exports.default = axiosist
 module.exports.createAdapter = createAdapter

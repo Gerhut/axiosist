@@ -1,5 +1,5 @@
 const test = require('ava').default
-const axiosist = require('.')
+const axiosist = require('.').default
 
 const TITLE_PREFIX = 'should request the right host & url'
 
