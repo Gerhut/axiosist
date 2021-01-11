@@ -148,8 +148,8 @@ test('should work with listened http server (failed request)', async t => {
   await new Promise(resolve => server.close(resolve))
 })
 
-test('server error after request', async t => {
+test('socket hang up', async t => {
   /** @type {import('http').Server} */
-  const server = createServer((req, res) => server.emit('error', Error('foo')))
-  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
+  const server = createServer((req, res) => res.destroy())
+  await t.throwsAsync(axiosist(server).get('/'), { message: 'socket hang up' })
 })
