@@ -4,8 +4,8 @@ import { AxiosAdapter, AxiosInstance } from 'axios';
 declare type RequestListener = (req: IncomingMessage, res: ServerResponse) => void
 declare type Handler = RequestListener | Server
 
-export const createAdapter: (handler: Handler) => AxiosAdapter
 declare const axiosist: (handler: Handler) => AxiosInstance
 
-
 export default axiosist
+export const createAdapter: (handler: Handler) => AxiosAdapter
+export { AxiosAdapter, AxiosInstance }
