@@ -1,62 +1,42 @@
+/**
+ * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
+ * @typedef {import('ava').Macro<[AxiosRequestConfig, string, string]>} Macro
+ */
+
 const test = require('ava').default
 const axiosist = require('.').default
 
-const TITLE_PREFIX = 'should request the right host & url'
-
-test(TITLE_PREFIX + 'with url (includes host)', async t => {
+/** @type {Macro} */
+const macro = async (t, options, expectedHost, expectedUrl) => {
   t.plan(2)
   await axiosist((req, res) => {
-    t.is(req.url, '/foo')
-    t.is(req.headers.host, 'example.com')
+    t.is(req.url, expectedUrl)
+    t.is(req.headers.host, expectedHost)
     res.end()
-  })({
-    url: 'http://example.com/foo'
-  })
-})
+  })(options)
+}
 
-test(TITLE_PREFIX + 'with baseURL (includes host)', async t => {
-  t.plan(2)
-  await axiosist((req, res) => {
-    t.is(req.url, '/foo')
-    t.is(req.headers.host, 'example.com')
-    res.end()
-  })({
-    baseURL: 'http://example.com/foo'
-  })
-})
+macro.title = (providedTitle = '') => 'should request the right host & url: ' + providedTitle
 
-test(TITLE_PREFIX + 'with baseURL (includes host) and url', async t => {
-  t.plan(2)
-  await axiosist((req, res) => {
-    t.is(req.url, '/foo/bar')
-    t.is(req.headers.host, 'example.com')
-    res.end()
-  })({
-    baseURL: 'http://example.com/foo',
-    url: '/bar'
-  })
-})
+test('with url (includes host)', macro, {
+  url: 'http://example.com/foo'
+}, 'example.com', '/foo')
 
-test(TITLE_PREFIX + 'with baseURL and url (includes host)', async t => {
-  t.plan(2)
-  await axiosist((req, res) => {
-    t.is(req.url, '/bar')
-    t.is(req.headers.host, 'example.com')
-    res.end()
-  })({
-    baseURL: '/foo',
-    url: 'http://example.com/bar'
-  })
-})
+test('with baseURL (includes host)', macro, {
+  baseURL: 'http://example.com/foo'
+}, 'example.com', '/foo')
 
-test(TITLE_PREFIX + 'with baseURL (includes host) and url (includes host)', async t => {
-  t.plan(2)
-  await axiosist((req, res) => {
-    t.is(req.url, '/bar')
-    t.is(req.headers.host, 'example.org')
-    res.end()
-  })({
-    baseURL: 'http://example.com/foo',
-    url: 'http://example.org/bar'
-  })
-})
+test('with baseURL (includes host) and url', macro, {
+  baseURL: 'http://example.com/foo',
+  url: '/bar'
+}, 'example.com', '/foo/bar')
+
+test('with baseURL and url (includes host)', macro, {
+  baseURL: '/foo',
+  url: 'http://example.com/bar'
+}, 'example.com', '/bar')
+
+test('with baseURL (includes host) and url (includes host)', macro, {
+  baseURL: 'http://example.com/foo',
+  url: 'http://example.org/bar'
+}, 'example.org', '/bar')
