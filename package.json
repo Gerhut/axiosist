@@ -4,8 +4,9 @@
   "description": "Convert node.js request handler to axios adapter",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --project jsconfig.json",
     "lint": "standard",
-    "postlint": "tsc",
+    "postlint": "tsc --project jsconfig.test.json",
     "pretest": "npm run lint",
     "test": "ava",
     "posttest": "nyc ava"

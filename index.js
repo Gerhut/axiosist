@@ -16,6 +16,7 @@ const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
  * @callback RequestListener
  * @param {IncomingMessage} request
  * @param {ServerResponse} response
+ * @returns {void}
  */
 
 /** @typedef {RequestListener | Server} Handler */

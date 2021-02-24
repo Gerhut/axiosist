@@ -3,9 +3,13 @@
     "target": "es2017",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "allowJs": true,
     "checkJs": true,
-    "noEmit": true,
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "strict": true
-  }
+  },
+  "files": [
+    "index.js"
+  ]
 }
