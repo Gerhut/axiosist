@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/node": ">=10.13.0",
-    "axios": "^0.21.0"
+    "axios": ">=0.21.0"
   },
   "devDependencies": {
     "ava": "^3.0.0",
