@@ -1,6 +1,6 @@
 # axiosist
 
-[![Build Status](https://travis-ci.org/Gerhut/axiosist.svg?branch=master)](https://travis-ci.org/Gerhut/axiosist)
+[![Node.js CI](https://github.com/Gerhut/axiosist/actions/workflows/ci.yaml/badge.svg)](https://github.com/Gerhut/axiosist/actions/workflows/ci.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/Gerhut/axiosist/badge.svg?branch=master)](https://coveralls.io/github/Gerhut/axiosist?branch=master)
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
