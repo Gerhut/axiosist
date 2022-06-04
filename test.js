@@ -95,7 +95,7 @@ test('should response the right body', async t => {
     res.end('foo')
   }).get('/')
 
-  t.is(response.data, 'foo')
+  t.is(/** @type {string} */(response.data), 'foo')
 })
 
 test('should fail correctly', async t => {
@@ -122,7 +122,7 @@ test('should work with unlistened http server', async t => {
   const server = createServer((req, res) => res.end('foo'))
   const response = await axiosist(server).get('/')
 
-  t.is(response.data, 'foo')
+  t.is(/** @type {string} */(response.data), 'foo')
   t.false(server.listening)
 })
 
@@ -132,7 +132,7 @@ test('should work with listened http server', async t => {
 
   const response = await axiosist(server).get('/')
 
-  t.is(response.data, 'bar')
+  t.is(/** @type {string} */(response.data), 'bar')
   t.true(server.listening)
 
   await new Promise(resolve => server.close(resolve))

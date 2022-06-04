@@ -41,8 +41,10 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
   url.protocol = 'http'
 
   // Apply original host to request header
-  if (url.host !== 'axiosist' && config.headers.host == null) {
-    config.headers.host = url.host
+  /** @type {any} */
+  const headers = config.headers
+  if (url.host !== 'axiosist' && headers.host == null) {
+    headers.host = url.host
   }
 
   const server = handler instanceof Server ? handler : createServer(handler)
