@@ -1,23 +1,29 @@
 /**
+ * @typedef {import('ava').ExecutionContext} ExecutionContext
  * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
- * @typedef {import('ava').Macro<[AxiosRequestConfig, string, string]>} Macro
  */
 
 const test = require('ava').default
 const axios = require('axios').default
 const axiosist = require('.').default
 
-/** @type {Macro} */
-const macro = async (t, options, expectedHost, expectedUrl) => {
-  t.plan(2)
-  await axiosist((req, res) => {
-    t.is(req.url, expectedUrl)
-    t.is(req.headers.host, expectedHost)
-    res.end()
-  })(options)
-}
-
-macro.title = (providedTitle = '') => 'should request the right host & url: ' + providedTitle
+const macro = test.macro({
+  /**
+   * @param {ExecutionContext} t
+   * @param {AxiosRequestConfig} options
+   * @param {string} expectedHost
+   * @param {string} expectedUrl
+   */
+  exec: async (t, options, expectedHost, expectedUrl) => {
+    t.plan(2)
+    await axiosist((req, res) => {
+      t.is(req.url, expectedUrl)
+      t.is(req.headers.host, expectedHost)
+      res.end()
+    })(options)
+  },
+  title: (providedTitle = '') => 'should request the right host & url: ' + providedTitle
+})
 
 test('with url (includes host)', macro, {
   url: 'http://example.com/foo'

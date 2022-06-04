@@ -1,5 +1,5 @@
-const test = require('ava').default
 const { createServer } = require('http')
+const test = require('ava').default
 const axios = require('axios').default
 const axiosist = require('.').default
 
