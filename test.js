@@ -1,5 +1,6 @@
-const test = require('ava').default
 const { createServer } = require('http')
+const test = require('ava').default
+const axios = require('axios').default
 const axiosist = require('.').default
 
 test('should request', async t => {
@@ -27,15 +28,17 @@ test('should request the right url', async t => {
   })
 })
 
-test('should request the empty url', async t => {
-  t.plan(1)
-  await axiosist((req, res) => {
-    t.is(req.url, '/?baz=qux')
-    res.end()
-  }).request({
-    params: { baz: 'qux' }
+if (/** @type {any} */(axios).VERSION !== '0.25.0') {
+  test('should request the empty url', async t => {
+    t.plan(1)
+    await axiosist((req, res) => {
+      t.is(req.url, '/?baz=qux')
+      res.end()
+    }).request({
+      params: { baz: 'qux' }
+    })
   })
-})
+}
 
 test('should request the right header', async t => {
   t.plan(1)
@@ -95,7 +98,7 @@ test('should response the right body', async t => {
     res.end('foo')
   }).get('/')
 
-  t.is(response.data, 'foo')
+  t.is(/** @type {string} */(response.data), 'foo')
 })
 
 test('should fail correctly', async t => {
@@ -122,7 +125,7 @@ test('should work with unlistened http server', async t => {
   const server = createServer((req, res) => res.end('foo'))
   const response = await axiosist(server).get('/')
 
-  t.is(response.data, 'foo')
+  t.is(/** @type {string} */(response.data), 'foo')
   t.false(server.listening)
 })
 
@@ -132,7 +135,7 @@ test('should work with listened http server', async t => {
 
   const response = await axiosist(server).get('/')
 
-  t.is(response.data, 'bar')
+  t.is(/** @type {string} */(response.data), 'bar')
   t.true(server.listening)
 
   await new Promise(resolve => server.close(resolve))
