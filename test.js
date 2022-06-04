@@ -28,7 +28,7 @@ test('should request the right url', async t => {
   })
 })
 
-if (axios.VERSION !== '0.25.0') {
+if (/** @type {any} */(axios).VERSION !== '0.25.0') {
   test('should request the empty url', async t => {
     t.plan(1)
     await axiosist((req, res) => {
