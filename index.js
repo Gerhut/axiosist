@@ -4,12 +4,13 @@
  * @typedef {import('http').ServerResponse} ServerResponse
  * @typedef {import('axios').AxiosAdapter} AxiosAdapter
  * @typedef {import('axios').AxiosInstance} AxiosInstance
+ * @typedef {import('axios').AxiosStatic} AxiosStatic
  */
 
 const { Server, createServer } = require('http')
 const { URL } = require('url')
 
-const axios = require('axios').default
+const axios = /** @type {AxiosStatic} */(/** @type {unknown} */(require('axios')))
 const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
 
 /**
