@@ -4,7 +4,6 @@
  */
 
 const test = require('ava').default
-const axios = require('axios').default
 const axiosist = require('.').default
 
 const macro = test.macro({
@@ -29,11 +28,9 @@ test('with url (includes host)', macro, {
   url: 'http://example.com/foo'
 }, 'example.com', '/foo')
 
-if (/** @type {any} */(axios).VERSION !== '0.25.0') {
-  test('with baseURL (includes host)', macro, {
-    baseURL: 'http://example.com/foo'
-  }, 'example.com', '/foo')
-}
+test('with baseURL (includes host)', macro, {
+  baseURL: 'http://example.com/foo'
+}, 'example.com', '/foo')
 
 test('with baseURL (includes host) and url', macro, {
   baseURL: 'http://example.com/foo',
