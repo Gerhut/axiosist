@@ -11,7 +11,7 @@ const { Server, createServer } = require('http')
 const { URL } = require('url')
 
 const axios = /** @type {AxiosStatic} */(/** @type {unknown} */(require('axios')))
-const defaultAdapter = /** @type {AxiosAdapter} */(axios.defaults.adapter)
+const defaultAdapter = /** @type {AxiosAdapter} */(axios.getAdapter(axios.defaults.adapter))
 
 /**
  * @callback RequestListener
