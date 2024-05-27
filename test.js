@@ -153,3 +153,17 @@ test('socket hang up', async t => {
   const server = createServer((req, res) => res.destroy())
   await t.throwsAsync(axiosist(server).get('/'), { message: 'socket hang up' })
 })
+
+test('should not keep error listeners', async t => {
+  const server = createServer((req, res) => res.end())
+
+  await axiosist(server).get('/')
+  t.is(server.listenerCount('error'), 0)
+})
+
+test('should not keep error listeners (failed request)', async t => {
+  const server = createServer((req, res) => res.end('foo'))
+
+  await t.throwsAsync(axiosist(server).get('/', { maxContentLength: 1 }))
+  t.is(server.listenerCount('error'), 0)
+})
