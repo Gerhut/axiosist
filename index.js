@@ -51,9 +51,9 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
   const server = handler instanceof Server ? handler : createServer(handler)
   const listening = server.listening
 
-  server.on('error', reject)
+  server.on('error', reject);
 
-  resolve(/** @type {Promise<void>} */ (
+  /** @type {Promise<void>} */ (
     new Promise(resolve => {
       if (listening) {
         resolve()
@@ -90,7 +90,7 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
         })
       }
     }
-  ))
+  ).then(resolve, reject)
 })
 
 /**
