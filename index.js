@@ -51,9 +51,7 @@ const createAdapter = handler => config => new Promise((resolve, reject) => {
   const server = handler instanceof Server ? handler : createServer(handler)
   const listening = server.listening
 
-  if (server.eventNames().includes('error')) {
-    server.on('error', reject)
-  }
+  server.on('error', reject);
 
   /** @type {Promise<void>} */ (
     new Promise(resolve => {
