@@ -174,6 +174,15 @@ test('should fail with server error', async t => {
     server.emit('error', new Error('foo'))
     res.end()
   })
+  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
+})
+
+test('should fail with handled server error', async t => {
+  const server = createServer()
+  server.on('request', (req, res) => {
+    server.emit('error', new Error('foo'))
+    res.end()
+  })
   server.on('error', (err) => console.error(err))
   await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
 })
