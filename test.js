@@ -154,18 +154,18 @@ test('should fail with client error', async t => {
   await t.throwsAsync(axiosist(server).get('/'), { message: 'socket hang up' })
 })
 
-test('should not keep error listeners', async t => {
+test('should keep once error listeners', async t => {
   const server = createServer((req, res) => res.end())
 
   await axiosist(server).get('/')
-  t.is(server.listenerCount('error'), 0)
+  t.is(server.listenerCount('error'), 1)
 })
 
-test('should not keep error listeners (client error)', async t => {
+test('should keep once error listeners (client error)', async t => {
   const server = createServer((req, res) => res.end('foo'))
 
   await t.throwsAsync(axiosist(server).get('/', { maxContentLength: 1 }))
-  t.is(server.listenerCount('error'), 0)
+  t.is(server.listenerCount('error'), 1)
 })
 
 test('should fail with server error', async t => {
@@ -178,11 +178,39 @@ test('should fail with server error', async t => {
 })
 
 test('should fail with handled server error', async t => {
+  t.plan(2)
   const server = createServer()
   server.on('request', (req, res) => {
     server.emit('error', new Error('foo'))
     res.end()
   })
-  server.on('error', (err) => console.error(err))
-  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
+
+  server.on('error', (err) => {
+    t.is(err.message, 'foo')
+  })
+
+  await axiosist(server).get('/')
+
+  t.is(server.listenerCount('error'), 1)
+})
+
+test('should be listened error to once', async t => {
+  const server = createServer()
+
+  server.on('request', (req, res) => {
+    res.end('ok')
+  })
+
+  server.listen()
+
+  const request = axiosist(server)
+  const promises = []
+
+  for (let i = 0; i < 20; i++) {
+    promises.push(() => request.get('/'))
+  }
+
+  await Promise.all(promises.map(promise => promise()))
+
+  t.is(server.listenerCount('error'), 1)
 })
