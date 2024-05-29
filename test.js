@@ -1,4 +1,3 @@
-const { createServer } = require('http')
 const test = require('ava').default
 const axiosist = require('.').default
 
@@ -98,7 +97,15 @@ test('should response the right body', async t => {
   t.is(/** @type {string} */(response.data), 'foo')
 })
 
-test('should fail correctly', async t => {
+test('should handle server failure', async t => {
+  await t.throwsAsync(axiosist((req, res) => {
+    res.destroy()
+  }).request({
+    url: '/'
+  }), { message: 'socket hang up' })
+})
+
+test('should handle client failure', async t => {
   await t.throwsAsync(axiosist((req, res) => {
     res.end('foo')
   }).request({
@@ -116,73 +123,4 @@ test('should response redirect', async t => {
 
   t.is(response.status, 302)
   t.is(response.headers.location, 'http://example.com/')
-})
-
-test('should work with unlistened http server', async t => {
-  const server = createServer((req, res) => res.end('foo'))
-  const response = await axiosist(server).get('/')
-
-  t.is(/** @type {string} */(response.data), 'foo')
-  t.false(server.listening)
-})
-
-test('should work with listened http server', async t => {
-  const server = createServer((req, res) => res.end('bar'))
-  await new Promise(resolve => server.listen(resolve))
-
-  const response = await axiosist(server).get('/')
-
-  t.is(/** @type {string} */(response.data), 'bar')
-  t.true(server.listening)
-
-  await new Promise(resolve => server.close(resolve))
-})
-
-test('should work with listened http server (failed request)', async t => {
-  const server = createServer((req, res) => res.end('bar'))
-  await new Promise(resolve => server.listen(resolve))
-
-  await t.throwsAsync(axiosist(server).get('/', { maxContentLength: 1 }))
-  t.true(server.listening)
-
-  await new Promise(resolve => server.close(resolve))
-})
-
-test('should fail with client error', async t => {
-  /** @type {import('http').Server} */
-  const server = createServer((req, res) => res.destroy())
-  await t.throwsAsync(axiosist(server).get('/'), { message: 'socket hang up' })
-})
-
-test('should not keep error listeners', async t => {
-  const server = createServer((req, res) => res.end())
-
-  await axiosist(server).get('/')
-  t.is(server.listenerCount('error'), 0)
-})
-
-test('should not keep error listeners (client error)', async t => {
-  const server = createServer((req, res) => res.end('foo'))
-
-  await t.throwsAsync(axiosist(server).get('/', { maxContentLength: 1 }))
-  t.is(server.listenerCount('error'), 0)
-})
-
-test('should fail with server error', async t => {
-  const server = createServer()
-  server.on('request', (req, res) => {
-    server.emit('error', new Error('foo'))
-    res.end()
-  })
-  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
-})
-
-test('should fail with handled server error', async t => {
-  const server = createServer()
-  server.on('request', (req, res) => {
-    server.emit('error', new Error('foo'))
-    res.end()
-  })
-  server.on('error', (err) => console.error(err))
-  await t.throwsAsync(axiosist(server).get('/'), { message: 'foo' })
 })
