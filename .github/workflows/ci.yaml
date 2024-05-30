@@ -32,9 +32,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: |
+    - name: NPM Install
+      run: |
         npm install
         npm install axios@${{ matrix.axios-version }}
+    - name: NPM Test
+      run: |
         npm run lint
         npm run typing
         npx nyc --reporter=text --reporter=lcov npm test
