@@ -37,6 +37,6 @@
   "devDependencies": {
     "ava": "^5.3.1",
     "standard": "^17.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^6.0.2"
   }
 }
